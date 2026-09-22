@@ -1,5 +1,5 @@
 STM8L051F3
-Software test  instruction speed . 
+Software test  instruction speed test.
 Port PC5
 Pin 1 
 Case TSSOP20, 20 pin SMD 
@@ -10,3 +10,7 @@ Toggle out PC5 , pin 1 , F=333KHz ( F 133 KHz = 6 x cycles )
 
 333 KHz out at Pin1 means 2  MHz  sys clock . 0.5 us per instruction 
 means 500 ns per instruction .
+
+2 MHz = default spee ( this program ) 
+16 MHz = max speed . ( prescaler 1:1 ) 
+RC HSI internal osc. 
