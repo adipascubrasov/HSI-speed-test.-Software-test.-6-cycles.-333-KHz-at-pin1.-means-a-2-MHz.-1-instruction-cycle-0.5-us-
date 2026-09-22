@@ -3,10 +3,10 @@ Software test  instruction speed .
 Port PC5
 Pin 1 
 Case TSSOP20, 20 pin SMD 
-Toggle out PC5 , pin 1 , F=333KHz
-6  instruction siple cycles = pin1 Out 333 KHz.
+Toggle out PC5 , pin 1 , F=333KHz ( F 133 KHz = 6 x cycles ) 
+6 x  instruction simple cycles = pin 1 Out = 333 KHz.
 0.5 us per instruction 
-2 MHz core speed , inernal sys clock .
+2 MHz core speed & inernal sys clock .
 
 333 KHz out at Pin1 means 2  MHz  sys clock . 0.5 us per instruction 
 means 500 ns per instruction .
