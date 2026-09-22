@@ -1,0 +1,45 @@
+stm8/
+
+; STM8L051F3 - BLINK SOFTWARE ULTRA-SCURT PE PC5 CU CEASUL ÎN STARE DEFAULT
+    segment 'rom'           ; Codul se va scrie în memoria Flash (ROM)
+
+; DEFINIRE ADRESE REGISTRE CONFORME CU PROIECTUL TĂU FUNCTIONAL
+FLASH_PUKR  equ $5052       ; Registru deblocare memorie Flash
+CLK_PCKENR2 equ $50C4       ; Registru control periferice (Porturi IO)
+
+; REGISTRE GPIO PORT C
+PC_ODR      equ $500A       ; Output Data Register Port C
+PC_DDR      equ $500C       ; Data Direction Register Port C (1=ieșire)
+PC_CR1      equ $500D       ; Control Register 1 Port C (1=Push-Pull)
+PC_CR2      equ $500E       ; Control Register 2 Port C (1=Pantă rapidă)
+
+INIT:   
+        ; 1. Deblocare Flash hardware
+        ld a,#$56           
+        ld FLASH_PUKR,a     
+        ld a,#$AE           
+        ld FLASH_PUKR,a     
+
+        ; 2. Activare ceas periferice general pentru porturile IO (Inclusiv Port C)
+        ld a,#$FF           
+        ld CLK_PCKENR2,a    
+
+        ; 3. Configurare hardware pin PC5 ca ieșire push-pull de mare viteză
+        ld a,#$FF       
+        ld PC_DDR,a         ; Setează portul C ca ieșire
+        ld PC_CR1,a         ; Activează modul Push-Pull
+        ld a,#$20           ; Mască binară dedicată pentru pinul PC5
+        ld PC_CR2,a         ; Activează viteza maximă pe pin pentru fronturi curate
+
+MAIN:   
+        ; --- BUCLĂ SOFTWARE ULTRA-SCURTĂ (3 CICLURI DE CEAS TOTAL) ---
+        bcpl PC_ODR,#5      ; [1 ciclu] Inversează starea pinului PC5 (LED)
+        jp MAIN             ; [2 cicluri] Sare înapoi la eticheta MAIN
+
+    segment 'vectit'        ; Secțiunea pentru tabela de vectori
+        dc.b $82, $00       ; Aliniere hardware specifică seriei STM8L
+        dc.w INIT           ; Setează rutina INIT ca vector de pornire (Reset)
+
+    end                     ; Sfârșitul fișierului de asamblare
+							; Tactul intern  nu se poate scoate direct pe pinul CCO pin 20 
+							
